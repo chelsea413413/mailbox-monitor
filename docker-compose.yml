@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  mailbox-monitor:
+    build: .
+    container_name: mailbox-monitor
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./output:/app/output
+      - ./config:/app/config
+    env_file:
+      - config/.env
+    entrypoint: ["python", "-m", "src.main"]

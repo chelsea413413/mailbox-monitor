@@ -1,0 +1,144 @@
+# ============================================
+# 各省厅长信箱网址配置
+# 每个省对应一个独立采集适配器（Crawler）
+# crawler_type: http | playwright | api
+# ============================================
+
+provinces:
+  - id: sichuan
+    name: 四川
+    url: https://sthjt.sc.gov.cn/sthjt/c103053/newldxx.shtml
+    crawler: SichuanCrawler
+    crawler_type: http
+
+  - id: hunan
+    name: 湖南
+    url: http://sthjt.hunan.gov.cn/sthjt/hdjl/zxts/97514/index.html
+    crawler: HunanCrawler
+    crawler_type: http
+
+  - id: hubei
+    name: 湖北
+    url: http://sthjt.hubei.gov.cn/hdjl/zxjygk/
+    crawler: HubeiCrawler
+    crawler_type: http
+
+  - id: jiangsu
+    name: 江苏
+    url: http://sthjt.jiangsu.gov.cn/jact/front/mailpublist.do?sysid=143
+    crawler: JiangsuCrawler
+    crawler_type: api
+
+  - id: guangxi
+    name: 广西
+    url: http://sthjt.gxzf.gov.cn/gxhd/ldxx/
+    crawler: GuangxiCrawler
+    crawler_type: http
+
+  - id: anhui
+    name: 安徽
+    url: https://sthjt.ah.gov.cn/zmhd/index.html
+    crawler: AnhuiCrawler
+    crawler_type: http
+
+  - id: yunnan
+    name: 云南
+    url: https://sthjt.yn.gov.cn/hdjl/ldxxlist.aspx
+    crawler: YunnanCrawler
+    crawler_type: http
+
+  - id: guizhou
+    name: 贵州
+    url: https://sthj.guizhou.gov.cn/hdjl/
+    crawler: GuizhouCrawler
+    crawler_type: http
+
+  - id: shaanxi
+    name: 陕西
+    url: https://sthjt.shaanxi.gov.cn/hd/ldxx/xd/
+    crawler: ShaanxiCrawler
+    crawler_type: http
+
+  - id: henan
+    name: 河南
+    url: https://sthjt.henan.gov.cn/hdjl/wyzxldxx/list/
+    crawler: HenanCrawler
+    crawler_type: http
+
+  - id: hebei
+    name: 河北
+    url: https://hbepb.hebei.gov.cn/hbepb/hdjl/lxhf/
+    crawler: HebeiCrawler
+    crawler_type: http
+
+  - id: jiangxi
+    name: 江西
+    url: https://sthjt.jiangxi.gov.cn/jxssthjt/dflbcs/dflb/list.html
+    crawler: JiangxiCrawler
+    crawler_type: http
+
+  - id: shandong
+    name: 山东
+    url: http://sthj.shandong.gov.cn/hdjl/zxzx/index.html
+    crawler: ShandongCrawler
+    crawler_type: http
+
+  - id: heilongjiang
+    name: 黑龙江
+    url: http://sthj.hlj.gov.cn/sthj/ldxx/public_wycx.shtml
+    crawler: HeilongjiangCrawler
+    crawler_type: http
+
+  - id: neimenggu
+    name: 内蒙古
+    url: https://sthjt.nmg.gov.cn/hdjl/zsk_8258/
+    crawler: NeimengguCrawler
+    crawler_type: http
+
+  - id: xinjiang
+    name: 新疆
+    url: https://sthjt.xinjiang.gov.cn/xjepd/zmhdtzxx/hd_mailbox.shtml
+    crawler: XinjiangCrawler
+    crawler_type: http
+
+  - id: gansu
+    name: 甘肃
+    url: https://sthj.gansu.gov.cn/sthj/c113082/lyzx.shtml
+    crawler: GansuCrawler
+    crawler_type: http
+
+  - id: qinghai
+    name: 青海
+    url: https://sthjt.qinghai.gov.cn/hdjl/lyzx/list.html
+    crawler: QinghaiCrawler
+    crawler_type: http
+
+  - id: ningxia
+    name: 宁夏
+    url: https://app.12345.nx.gov.cn/cns-bmfw-webrest/pages/Leader/service_openlist?emailFlag=29&deptGuid=46166aa4-792c-4f05-a315-abd04c14f4ff
+    crawler: NingxiaCrawler
+    crawler_type: api
+
+  - id: fujian
+    name: 福建
+    url: https://sthjt.fujian.gov.cn/gzcy/tzxx/
+    crawler: FujianCrawler
+    crawler_type: http
+
+  - id: guangdong
+    name: 广东
+    url: https://gdee.gd.gov.cn/hdjlpt/published?via=pc
+    crawler: GuangdongCrawler
+    crawler_type: api
+
+  - id: chongqing
+    name: 重庆
+    url: https://sthjj.cq.gov.cn/hdjl_249/gkxx/lxxd/
+    crawler: ChongqingCrawler
+    crawler_type: http
+
+  - id: tianjin
+    name: 天津
+    url: https://sthj.tj.gov.cn/ZMHD5922/ZMLJL3913/
+    crawler: TianjinCrawler
+    crawler_type: http

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+  .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .header { background: #2B579A; color: #fff; padding: 20px 30px; }
+  .header h1 { margin: 0; font-size: 20px; }
+  .header .date { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+  .summary { padding: 16px 30px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat-card { flex: 1; min-width: 120px; padding: 12px 16px; border-radius: 6px; text-align: center; }
+  .stat-card .num { font-size: 28px; font-weight: bold; }
+  .stat-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+  .stat-new { background: #E2EFDA; }
+  .stat-new .num { color: #538135; }
+  .stat-updated { background: #FFF2CC; }
+  .stat-updated .num { color: #BF8F00; }
+  .stat-failed { background: #FCE4E4; }
+  .stat-failed .num { color: #C00000; }
+  .stat-ok { background: #E7F0FA; }
+  .stat-ok .num { color: #2B579A; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f0f0f0; padding: 8px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #ddd; }
+  td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-success { background: #E2EFDA; color: #538135; }
+  .badge-failed { background: #FCE4E4; color: #C00000; }
+  .badge-no-new { background: #E7F0FA; color: #2B579A; }
+  .badge-alert { background: #FFF2CC; color: #BF8F00; }
+  .section { padding: 0 30px 20px; }
+  .section h2 { font-size: 15px; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+  .alert-box { background: #FFF8E1; border: 1px solid #FFC107; border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 13px; }
+  .footer { padding: 16px 30px; background: #f9f9f9; font-size: 12px; color: #999; text-align: center; }
+  a { color: #2B579A; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>厅长信箱监测日报</h1>
+    <div class="date">{{ report_date }} | 共监测 {{ results | length }} 个省份</div>
+  </div>
+
+  <div class="summary">
+    <div class="stat-card stat-new">
+      <div class="num">{{ total_new }}</div>
+      <div class="label">新增信件</div>
+    </div>
+    <div class="stat-card stat-updated">
+      <div class="num">{{ total_updated }}</div>
+      <div class="label">内容更新</div>
+    </div>
+    <div class="stat-card stat-ok">
+      <div class="num">{{ total_success }}</div>
+      <div class="label">采集成功</div>
+    </div>
+    <div class="stat-card stat-failed">
+      <div class="num">{{ total_failed }}</div>
+      <div class="label">采集失败</div>
+    </div>
+  </div>
+
+  {% if structure_alerts %}
+  <div class="section">
+    {% for alert in structure_alerts %}
+    <div class="alert-box">
+      <strong>结构变化告警 - {{ alert.province }}</strong>: {{ alert.message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="section">
+    <h2>各省采集概况</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>省份</th><th>状态</th><th>新增</th><th>更新</th><th>采集数</th><th>耗时</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td>{{ r.province }}</td>
+          <td>
+            {% if r.status.value == 'success' or r.status.value == 'no_new' %}
+              {% if r.has_changes %}
+              <span class="status-badge badge-success">有更新</span>
+              {% else %}
+              <span class="status-badge badge-no-new">今日无新增</span>
+              {% endif %}
+            {% elif r.status.value == 'partial' %}
+              <span class="status-badge badge-alert">部分失败</span>
+            {% elif r.status.value == 'failed' %}
+              <span class="status-badge badge-failed">采集失败</span>
+            {% endif %}
+          </td>
+          <td>{{ r.new_count }}</td>
+          <td>{{ r.updated_count }}</td>
+          <td>{{ r.total_found }}</td>
+          <td>{{ r.duration_seconds }}s</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for r in results %}
+  {% if r.has_changes %}
+  <div class="section">
+    <h2>{{ r.province }} - 新增/更新信件 ({{ r.changed_records | length }})</h2>
+    <table>
+      <thead><tr><th>状态</th><th>标题</th><th>发布日期</th><th>回复日期</th></tr></thead>
+      <tbody>
+        {% for rec in r.changed_records %}
+        <tr>
+          <td>
+            {% if rec.status.value == 'new' %}
+            <span class="status-badge badge-success">新增</span>
+            {% else %}
+            <span class="status-badge badge-alert">更新</span>
+            {% endif %}
+          </td>
+          <td><a href="{{ rec.url }}">{{ rec.title }}</a></td>
+          <td>{{ rec.publish_date or '-' }}</td>
+          <td>{{ rec.reply_date or '-' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  {% endfor %}
+
+  {% if total_failed > 0 %}
+  <div class="section">
+    <h2>采集失败详情</h2>
+    <table>
+      <thead><tr><th>省份</th><th>错误信息</th></tr></thead>
+      <tbody>
+        {% for r in results %}
+        {% if r.status.value == 'failed' %}
+        <tr><td>{{ r.province }}</td><td style="color: #C00000;">{{ r.error_message }}</td></tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="footer">本邮件由厅长信箱自动监测系统自动发送 | 附件为今日明细 Excel</div>
+</div>
+</body>
+</html>

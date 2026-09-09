@@ -1,0 +1,60 @@
+# ============================================
+# 厅长信箱监测系统 - 全局配置
+# ============================================
+
+# 数据库配置
+database:
+  type: sqlite
+  path: data/mailbox.db
+
+# 采集配置
+crawl:
+  # 列表页最大抓取页数
+  max_pages: 5
+  # 每页请求间隔（秒）
+  page_delay: 1.5
+  # 请求超时（秒）
+  timeout: 30
+  # HTTP重试次数
+  http_retries: 3
+  # HTTP重试退避基数（秒）
+  retry_backoff: 2
+  # 并发详情页请求数
+  detail_concurrency: 3
+  # User-Agent
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+  # Playwright headless 模式
+  playwright_headless: true
+  # 结构变化检测：列表页最少应解析出的条目数，低于此值视为疑似改版
+  min_list_items: 1
+
+# 邮件配置（敏感信息从环境变量读取）
+email:
+  smtp_host: ${SMTP_HOST}
+  smtp_port: ${SMTP_PORT}
+  smtp_user: ${SMTP_USER}
+  smtp_password: ${SMTP_PASSWORD}
+  from_addr: ${SMTP_USER}
+  to_addrs: ${MAIL_TO}
+  # 是否使用SSL
+  use_ssl: true
+
+# 日报配置
+report:
+  # 日报标题前缀
+  subject_prefix: "[厅长信箱监测日报]"
+  # 临时文件目录
+  output_dir: output
+  # Excel文件名模板
+  excel_template: "厅长信箱明细_{date}.xlsx"
+  # HTML报告模板路径
+  html_template: templates/daily_report.html.j2
+
+# 日志配置
+logging:
+  level: INFO
+  dir: logs
+  # 日志文件名模板
+  filename_template: "crawl_{date}.log"
+  # 保留天数
+  retain_days: 30
