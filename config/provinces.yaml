@@ -38,7 +38,7 @@ provinces:
     name: 安徽
     url: https://sthjt.ah.gov.cn/zmhd/zxts/index.html
     crawler: AnhuiCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: yunnan
     name: 云南
@@ -62,7 +62,7 @@ provinces:
     name: 河南
     url: https://sthjt.henan.gov.cn/hdjl/wyzxldxx/list/
     crawler: HenanCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: hebei
     name: 河北

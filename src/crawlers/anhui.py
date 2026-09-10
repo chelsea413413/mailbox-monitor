@@ -5,10 +5,10 @@ Method: HTTP + BeautifulSoup (static guestbook table)
 """
 from __future__ import annotations
 
-from .generic_http import GenericHttpCrawler
+from .playwright_crawler import PlaywrightCrawler
 
 
-class AnhuiCrawler(GenericHttpCrawler):
+class AnhuiCrawler(PlaywrightCrawler):
     """Anhui province environment department mailbox crawler."""
 
     # List page: ul.odd and ul.even rows with li.t0-t5 cells
@@ -31,3 +31,4 @@ class AnhuiCrawler(GenericHttpCrawler):
     detail_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
     id_pattern = r"/article/(\d+)"
+    pw_wait_selector = "ul.odd, ul.even, table"

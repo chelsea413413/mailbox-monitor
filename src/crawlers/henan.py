@@ -5,10 +5,10 @@ Method: HTTP + BeautifulSoup (static newslist)
 """
 from __future__ import annotations
 
-from .generic_http import GenericHttpCrawler
+from .playwright_crawler import PlaywrightCrawler
 
 
-class HenanCrawler(GenericHttpCrawler):
+class HenanCrawler(PlaywrightCrawler):
     """Henan province environment department mailbox crawler."""
 
     # List page: ul.newslist with li items
@@ -30,3 +30,4 @@ class HenanCrawler(GenericHttpCrawler):
     detail_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
     id_pattern = r"/pc/([A-F0-9]+)"
+    pw_wait_selector = "ul.newslist li, .newsList ul li"
