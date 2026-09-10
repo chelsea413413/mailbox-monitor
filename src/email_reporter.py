@@ -71,7 +71,7 @@ def send_email(
 ) -> None:
     """Send the daily report email with optional Excel attachment."""
     smtp_host = _expand_env(email_config.get("smtp_host", ""))
-    smtp_port = int(email_config.get("smtp_port", 465))
+    smtp_port = int(_expand_env(str(email_config.get("smtp_port", 465))))
     smtp_user = _expand_env(email_config.get("smtp_user", ""))
     smtp_password = _expand_env(email_config.get("smtp_password", ""))
     from_addr = _expand_env(email_config.get("from_addr", smtp_user))
