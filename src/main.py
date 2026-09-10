@@ -32,7 +32,7 @@ def load_config() -> tuple[dict, list[dict]]:
     load_dotenv(PROJECT_ROOT / "config" / ".env")
 
     with open(PROJECT_ROOT / "config" / "settings.yaml", encoding="utf-8") as f:
-        settings = yaml.safe_load(f)
+        settings = yaml.safe_load(os.path.expandvars(f.read()))
 
     with open(PROJECT_ROOT / "config" / "provinces.yaml", encoding="utf-8") as f:
         provinces_data = yaml.safe_load(f)
