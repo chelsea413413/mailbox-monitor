@@ -1,8 +1,7 @@
-"""四川省厅长信箱采集适配器。
+"""sichuan province crawler.
 
-网站: https://sthjt.sc.gov.cn/sthjt/c103053/newldxx.shtml
-采集方式: HTTP + BeautifulSoup
-独立文件 - 网站改版时只需修改此文件中的选择器配置。
+Site: https://sthjt.sc.gov.cn/sthjt/c103053/newldxx.shtml
+Method: HTTP + BeautifulSoup (static table)
 """
 from __future__ import annotations
 
@@ -10,27 +9,24 @@ from .generic_http import GenericHttpCrawler
 
 
 class SichuanCrawler(GenericHttpCrawler):
-    """四川省生态环境厅厅长信箱采集器。"""
+    """Sichuan province environment department mailbox crawler."""
 
-    # 列表页选择器 - 根据实际网站结构调整
-    list_container = ".news_list li, .list li, ul.list li, table tr"
-    list_title_sel = "a"
-    list_url_sel = "a"
+    # List page: table#newldxx with tr rows, 5 td cells each
+    list_container = "table#newldxx tr"
+    list_title_sel = "td:nth-child(2) a"
+    list_url_sel = "td:nth-child(2) a"
     list_url_attr = "href"
-    list_date_sel = "span, td.date, .date"
+    list_date_sel = "td:nth-child(3)"
     list_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
-    # 分页方式: path(index_2.html) / param(?page=2) / none
-    pagination_type = "path"
-    pagination_path_tpl = "index_{page}.html"
+    pagination_type = "none"
 
-    # 详情页选择器 - 根据实际网站结构调整
+    # Detail page selectors
     detail_title_sel = "h1, .title, .article-title"
-    detail_content_sel = ".content, .nr, .article-content, #zoom"
-    detail_reply_sel = ".reply, .huifu, .answer, .hf-nr"
+    detail_content_sel = ".content, .nr, .article-content, #zoom, .mail-content"
+    detail_reply_sel = ".reply, .huifu, .answer, .hf-nr, .reply-content"
     detail_publish_date_sel = ".date, .publish-date, .info span"
     detail_reply_date_sel = ".reply-date, .hf-date"
     detail_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
-    # 从详情页URL中提取原始ID的正则
-    id_pattern = r"/(\d+)/?"
+    id_pattern = r"mailId=(\d+)"

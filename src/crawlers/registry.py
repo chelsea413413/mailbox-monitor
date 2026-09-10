@@ -26,6 +26,7 @@ from .qinghai import QinghaiCrawler
 from .fujian import FujianCrawler
 from .chongqing import ChongqingCrawler
 from .tianjin import TianjinCrawler
+from .beijing import BeijingCrawler
 
 # API-based crawlers
 from .jiangsu import JiangsuCrawler
@@ -57,6 +58,7 @@ REGISTRY: dict[str, Type[BaseCrawler]] = {
     "guangdong": GuangdongCrawler,
     "chongqing": ChongqingCrawler,
     "tianjin": TianjinCrawler,
+    "beijing": BeijingCrawler,
 }
 
 

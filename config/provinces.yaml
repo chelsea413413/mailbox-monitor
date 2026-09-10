@@ -1,7 +1,6 @@
 # ============================================
-# 各省厅长信箱网址配置
-# 每个省对应一个独立采集适配器（Crawler）
-# crawler_type: http | playwright | api
+# Provinces config - each province has its own crawler
+# crawler_type: http | playwright | api | igi_api
 # ============================================
 
 provinces:
@@ -21,23 +20,23 @@ provinces:
     name: 湖北
     url: http://sthjt.hubei.gov.cn/hdjl/zxjygk/
     crawler: HubeiCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: jiangsu
     name: 江苏
     url: http://sthjt.jiangsu.gov.cn/jact/front/mailpublist.do?sysid=143
     crawler: JiangsuCrawler
-    crawler_type: api
+    crawler_type: playwright
 
   - id: guangxi
     name: 广西
     url: http://sthjt.gxzf.gov.cn/gxhd/ldxx/
     crawler: GuangxiCrawler
-    crawler_type: http
+    crawler_type: igi_api
 
   - id: anhui
     name: 安徽
-    url: https://sthjt.ah.gov.cn/zmhd/index.html
+    url: https://sthjt.ah.gov.cn/zmhd/zxts/index.html
     crawler: AnhuiCrawler
     crawler_type: http
 
@@ -45,19 +44,19 @@ provinces:
     name: 云南
     url: https://sthjt.yn.gov.cn/hdjl/ldxxlist.aspx
     crawler: YunnanCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: guizhou
     name: 贵州
     url: https://sthj.guizhou.gov.cn/hdjl/
     crawler: GuizhouCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: shaanxi
     name: 陕西
     url: https://sthjt.shaanxi.gov.cn/hd/ldxx/xd/
     crawler: ShaanxiCrawler
-    crawler_type: http
+    crawler_type: igi_api
 
   - id: henan
     name: 河南
@@ -69,25 +68,25 @@ provinces:
     name: 河北
     url: https://hbepb.hebei.gov.cn/hbepb/hdjl/lxhf/
     crawler: HebeiCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: jiangxi
     name: 江西
     url: https://sthjt.jiangxi.gov.cn/jxssthjt/dflbcs/dflb/list.html
     crawler: JiangxiCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: shandong
     name: 山东
     url: http://sthj.shandong.gov.cn/hdjl/zxzx/index.html
     crawler: ShandongCrawler
-    crawler_type: http
+    crawler_type: igi_api
 
   - id: heilongjiang
     name: 黑龙江
     url: http://sthj.hlj.gov.cn/sthj/ldxx/public_wycx.shtml
     crawler: HeilongjiangCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: neimenggu
     name: 内蒙古
@@ -105,13 +104,13 @@ provinces:
     name: 甘肃
     url: https://sthj.gansu.gov.cn/sthj/c113082/lyzx.shtml
     crawler: GansuCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: qinghai
     name: 青海
     url: https://sthjt.qinghai.gov.cn/hdjl/lyzx/list.html
     crawler: QinghaiCrawler
-    crawler_type: http
+    crawler_type: igi_api
 
   - id: ningxia
     name: 宁夏
@@ -135,10 +134,16 @@ provinces:
     name: 重庆
     url: https://sthjj.cq.gov.cn/hdjl_249/gkxx/lxxd/
     crawler: ChongqingCrawler
-    crawler_type: http
+    crawler_type: igi_api
 
   - id: tianjin
     name: 天津
     url: https://sthj.tj.gov.cn/ZMHD5922/ZMLJL3913/
     crawler: TianjinCrawler
-    crawler_type: http
+    crawler_type: playwright
+
+  - id: beijing
+    name: 北京
+    url: https://sthjj.beijing.gov.cn/hudong/xinxiang/sthjj/sindex/xx-sthjj.html
+    crawler: BeijingCrawler
+    crawler_type: playwright

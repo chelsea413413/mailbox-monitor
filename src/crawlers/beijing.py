@@ -1,6 +1,6 @@
-"""yunnan province crawler.
+"""beijing province crawler.
 
-Site: https://sthjt.yn.gov.cn/hdjl/ldxxlist.aspx
+Site: https://sthjj.beijing.gov.cn/hudong/xinxiang/sthjj/sindex/xx-sthjj.html
 Method: Playwright (JS rendering required)
 """
 from __future__ import annotations
@@ -8,14 +8,14 @@ from __future__ import annotations
 from .playwright_crawler import PlaywrightCrawler
 
 
-class YunnanCrawler(PlaywrightCrawler):
-    """yunnan province environment department mailbox crawler."""
+class BeijingCrawler(PlaywrightCrawler):
+    """Beijing municipality environment department mailbox crawler."""
 
-    list_container = "table tr, ul.list li, .news li"
+    list_container = "ul.list li, table tr, .mail-list li, .common-list li"
     list_title_sel = "a"
     list_url_sel = "a"
     list_url_attr = "href"
-    list_date_sel = "td:nth-child(3), span.date"
+    list_date_sel = "span, .date, td:nth-child(3)"
     list_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
     pagination_type = "none"
@@ -27,7 +27,7 @@ class YunnanCrawler(PlaywrightCrawler):
     detail_reply_date_sel = ".reply-date, .hf-date, .reply-time"
     detail_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
-    pw_wait_selector = "table, ul.list"
+    pw_wait_selector = "ul.list li, table tr, .mail-list li, .common-list li"
     pw_wait_timeout = 20000
 
-    id_pattern = r"id=(\d+)"
+    id_pattern = r"/(\d+)"
