@@ -1,14 +1,14 @@
 """sichuan province crawler.
 
 Site: https://sthjt.sc.gov.cn/sthjt/c103053/newldxx.shtml
-Method: HTTP + BeautifulSoup (static table)
+Method: Playwright (bypasses WAF, renders JS if needed)
 """
 from __future__ import annotations
 
-from .generic_http import GenericHttpCrawler
+from .playwright_crawler import PlaywrightCrawler
 
 
-class SichuanCrawler(GenericHttpCrawler):
+class SichuanCrawler(PlaywrightCrawler):
     """Sichuan province environment department mailbox crawler."""
 
     # List page: table#newldxx with tr rows, 5 td cells each
@@ -20,6 +20,9 @@ class SichuanCrawler(GenericHttpCrawler):
     list_date_pattern = r"\d{4}[-/]\d{1,2}[-/]\d{1,2}"
 
     pagination_type = "none"
+
+    pw_wait_selector = "table#newldxx tr, table tr"
+    pw_wait_timeout = 20000
 
     # Detail page selectors
     detail_title_sel = "h1, .title, .article-title"

@@ -60,7 +60,7 @@ class IGIApiCrawler(BaseCrawler):
         if self.igi_app_id:
             params["appId"] = self.igi_app_id
 
-        result = self.http_get_json(
+        result = self.playwright_get_json(
             api_url, params=params,
             headers={"Referer": self.base_url},
         )
@@ -81,8 +81,8 @@ class IGIApiCrawler(BaseCrawler):
         if hasattr(item, "_raw_data") and item._raw_data:
             return self._build_record(item._raw_data, item)
 
-        # Fallback: fetch the detail page HTML
-        html = self.http_get(item.url)
+        # Fallback: fetch the detail page HTML via Playwright (bypasses WAF)
+        html = self.playwright_fetch(item.url)
         soup = self.parse_html(html)
         content = ""
         reply = ""

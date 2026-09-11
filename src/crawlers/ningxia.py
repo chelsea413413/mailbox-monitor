@@ -31,7 +31,7 @@ class NingxiaCrawler(BaseCrawler):
             "pageSize": self.PAGE_SIZE,
         }
         try:
-            result = self.http_get_json(self.LIST_API, params=params)
+            result = self.playwright_get_json(self.LIST_API, params=params)
         except Exception:
             result = {}
 
@@ -72,7 +72,7 @@ class NingxiaCrawler(BaseCrawler):
 
         try:
             params = {"id": item.original_id, "deptGuid": self.DEPT_GUID}
-            result = self.http_get_json(self.DETAIL_API, params=params)
+            result = self.playwright_get_json(self.DETAIL_API, params=params)
             detail = result.get("data") or result
             if isinstance(detail, dict):
                 content = detail.get("content") or detail.get("questionContent") or ""
@@ -84,7 +84,7 @@ class NingxiaCrawler(BaseCrawler):
 
         if not content or not reply:
             try:
-                html = self.http_get(item.url)
+                html = self.playwright_fetch(item.url)
                 soup = self.parse_html(html)
                 if not content:
                     el = soup.select_one(".content, .question-content, .consult")

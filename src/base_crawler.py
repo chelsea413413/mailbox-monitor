@@ -177,27 +177,65 @@ class BaseCrawler(ABC):
 
     def playwright_fetch(self, url: str, wait_for: str = None, wait_timeout: int = 15000) -> str:
         """Render page with Playwright, return HTML."""
-        if self._page is None:
-            from playwright.sync_api import sync_playwright
-            self._playwright = sync_playwright().start()
-            headless = self.crawl_cfg.get("playwright_headless", True)
-            ua = self.crawl_cfg.get("user_agent", BROWSER_HEADERS["User-Agent"])
-            self._browser = self._playwright.chromium.launch(
-                headless=headless,
-                args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
-            )
-            context = self._browser.new_context(
-                user_agent=ua, locale="zh-CN",
-                extra_http_headers={"Accept-Language": "zh-CN,zh;q=0.9"},
-            )
-            self._page = context.new_page()
+        self._init_playwright()
         self.logger.info(f"[{self.province}] Playwright navigating to {url}")
-        self._page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        self._page.goto(url, wait_until="commit", timeout=60000)
         if wait_for:
-            self._page.wait_for_selector(wait_for, timeout=wait_timeout)
+            try:
+                self._page.wait_for_selector(wait_for, timeout=wait_timeout)
+            except Exception as e:
+                self.logger.warning(
+                    f"[{self.province}] wait_for_selector timed out, "
+                    f"continuing with available HTML: {e}"
+                )
         else:
-            self._page.wait_for_load_state("networkidle", timeout=20000)
+            self._page.wait_for_timeout(3000)
         return self._page.content()
+
+    def _init_playwright(self):
+        """Lazily start Playwright browser if not already running."""
+        if self._page is not None:
+            return
+        from playwright.sync_api import sync_playwright
+        self._playwright = sync_playwright().start()
+        headless = self.crawl_cfg.get("playwright_headless", True)
+        ua = self.crawl_cfg.get("user_agent", BROWSER_HEADERS["User-Agent"])
+        self._browser = self._playwright.chromium.launch(
+            headless=headless,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+            ],
+        )
+        context = self._browser.new_context(
+            user_agent=ua, locale="zh-CN",
+            extra_http_headers={"Accept-Language": "zh-CN,zh;q=0.9"},
+        )
+        self._page = context.new_page()
+
+    def playwright_get_json(self, url: str, params: dict = None, headers: dict = None) -> dict:
+        """Fetch JSON by navigating the real browser to the API URL."""
+        import json as _json
+        from urllib.parse import urlencode
+        self._init_playwright()
+        full_url = f"{url}?{urlencode(params)}" if params else url
+        self.logger.info(f"[{self.province}] Playwright JSON fetch: {full_url}")
+        if headers:
+            self._page.set_extra_http_headers(headers)
+        response = self._page.goto(full_url, wait_until="commit", timeout=60000)
+        try:
+            self._page.wait_for_load_state("domcontentloaded", timeout=10000)
+        except Exception:
+            pass
+        if response is not None:
+            text = response.text()
+        else:
+            text = self._page.evaluate("() => document.body.innerText")
+        if headers:
+            self._page.set_extra_http_headers({})
+        return _json.loads(text)
 
     def playwright_click_and_wait(self, selector: str, wait_for: str = None, wait_timeout: int = 15000) -> str:
         if self._page is None:
@@ -206,7 +244,7 @@ class BaseCrawler(ABC):
         if wait_for:
             self._page.wait_for_selector(wait_for, timeout=wait_timeout)
         else:
-            self._page.wait_for_load_state("networkidle", timeout=20000)
+            self._page.wait_for_timeout(3000)
         return self._page.content()
 
     @staticmethod

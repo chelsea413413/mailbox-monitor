@@ -29,7 +29,7 @@ class GuangdongCrawler(BaseCrawler):
             "type": "leader",
         }
         try:
-            result = self.http_get_json(self.LIST_API, params=params)
+            result = self.playwright_get_json(self.LIST_API, params=params)
         except Exception:
             result = {}
 
@@ -71,7 +71,7 @@ class GuangdongCrawler(BaseCrawler):
         # 尝试 API 获取详情
         try:
             params = {"id": item.original_id}
-            result = self.http_get_json(self.DETAIL_API, params=params)
+            result = self.playwright_get_json(self.DETAIL_API, params=params)
             detail = result.get("data") or result
             if isinstance(detail, dict):
                 content = detail.get("content") or detail.get("question") or detail.get("consultContent") or ""
@@ -84,7 +84,7 @@ class GuangdongCrawler(BaseCrawler):
         # API 失败时回退到网页解析
         if not content or not reply:
             try:
-                html = self.http_get(item.url)
+                html = self.playwright_fetch(item.url)
                 soup = self.parse_html(html)
                 if not content:
                     el = soup.select_one(".content, .question, .consult-content, .wysz-content")

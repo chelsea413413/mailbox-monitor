@@ -13,7 +13,7 @@ from ..models import ListItem, LetterRecord
 
 
 class PlaywrightCrawler(GenericHttpCrawler):
-    """Crawler that uses Playwright for list page rendering, then HTTP for details.
+    """Crawler that uses Playwright for all page rendering.
 
     Subclasses set the same selector attributes as GenericHttpCrawler,
     plus optionally:
@@ -36,17 +36,10 @@ class PlaywrightCrawler(GenericHttpCrawler):
         return self._parse_list(soup)
 
     def fetch_detail(self, item: ListItem) -> LetterRecord:
-        """Fetch detail page. Try HTTP first, fall back to Playwright on error."""
-        try:
-            html = self.http_get(item.url)
-            soup = self.parse_html(html)
-            record = self._parse_detail(soup, item)
-            if record.content or record.reply_content:
-                return record
-        except Exception:
-            pass
+        """Fetch detail page using Playwright exclusively.
 
-        # Fallback: use Playwright for detail page
+        Government WAFs block httpx, so we never try HTTP for detail pages.
+        """
         html = self.playwright_fetch(
             item.url,
             wait_for=self.pw_wait_selector or None,

@@ -37,6 +37,12 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium --with-deps
 
+      - name: Disable IPv6 (Chinese gov sites only support IPv4)
+        run: |
+          sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+          sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+          sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+
       - name: Restore database cache
         uses: actions/cache/restore@v4
         with:

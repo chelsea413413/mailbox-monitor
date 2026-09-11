@@ -7,6 +7,19 @@ Usage:
 """
 from __future__ import annotations
 
+# Force IPv4 for all DNS lookups.  GitHub Actions runners have IPv6
+# connectivity but Chinese government websites only serve over IPv4,
+# causing "[Errno 101] Network is unreachable" when IPv6 is tried first.
+import socket as _socket
+_orig_getaddrinfo = _socket.getaddrinfo
+
+def _ipv4_only_getaddrinfo(host, *args, **kwargs):
+    results = _orig_getaddrinfo(host, *args, **kwargs)
+    ipv4 = [r for r in results if r[0] == _socket.AF_INET]
+    return ipv4 if ipv4 else results
+
+_socket.getaddrinfo = _ipv4_only_getaddrinfo
+
 import os
 import sys
 import time

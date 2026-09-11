@@ -1,6 +1,6 @@
 # ============================================
 # Provinces config - each province has its own crawler
-# crawler_type: http | playwright | api | igi_api
+# crawler_type: playwright | api | igi_api
 # ============================================
 
 provinces:
@@ -8,13 +8,13 @@ provinces:
     name: 四川
     url: https://sthjt.sc.gov.cn/sthjt/c103053/newldxx.shtml
     crawler: SichuanCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: hunan
     name: 湖南
     url: http://sthjt.hunan.gov.cn/sthjt/hdjl/zxts/97514/index.html
     crawler: HunanCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: hubei
     name: 湖北
@@ -92,13 +92,13 @@ provinces:
     name: 内蒙古
     url: https://sthjt.nmg.gov.cn/hdjl/zsk_8258/
     crawler: NeimengguCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: xinjiang
     name: 新疆
     url: https://sthjt.xinjiang.gov.cn/xjepd/zmhdtzxx/hd_mailbox.shtml
     crawler: XinjiangCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: gansu
     name: 甘肃
@@ -122,7 +122,7 @@ provinces:
     name: 福建
     url: https://sthjt.fujian.gov.cn/gzcy/tzxx/
     crawler: FujianCrawler
-    crawler_type: http
+    crawler_type: playwright
 
   - id: guangdong
     name: 广东
